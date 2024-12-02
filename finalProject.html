@@ -35,6 +35,7 @@
                 </div>
             </div>
         </nav>
+
         <div class="jumbotron jumbotron-fluid text-center text-white" id="jumbotronImages" style="
             background-size: cover;
             background-position: center;
@@ -46,41 +47,305 @@
                 <div class="d-flex justify-content-center align-items-center h-100">
                     <div>
                         <h1 class="mb-3">Fantastic Art and Where to Find Them</h1>
-                        <h4 class="mb-3">Welcome to the exhibit!</h4>
+                        <h4 class="mb-3">Welcome to the Exhibit!</h4>
                     </div>
                 </div>
             </div>
         </div>
-        <script>
-            function initializeJumbotron() {
-                const imageUrls = [
-                    "https://images.metmuseum.org/CRDImages/ep/original/DP-13139-001.jpg",
-                    "https://images.metmuseum.org/CRDImages/ep/original/DT1567.jpg",
-                    "https://images.metmuseum.org/CRDImages/dp/original/DP829067.jpg",
-                    "https://images.metmuseum.org/CRDImages/rl/original/SF-1975-1-2202.jpg",
-                    "https://images.metmuseum.org/CRDImages/es/original/88487.jpg",
-                    "https://images.metmuseum.org/CRDImages/aa/original/LC-32.75.335-001.jpg",
-                    "https://images.metmuseum.org/CRDImages/ad/original/DP-12550-001.jpg",
-                    "https://images.metmuseum.org/CRDImages/dp/original/DP824614.jpg",
-                    "https://images.metmuseum.org/CRDImages/ep/original/DP-1012-01.jpg",
-                    "https://images.metmuseum.org/CRDImages/ad/original/DP-12550-001.jpg",
-                ]
-                
-                const jumbotron = document.getElementById("jumbotronImages");
-                let currIndex = 0;
+    </header>
 
-                function updateJumbotronBackground() {
-                    jumbotron.style.backgroundImage = `url('${imageUrls[currIndex]}')`;
-                    currIndex = (currIndex + 1) % imageUrls.length;
-                }
+    <div class="container mt-5 mb-4">
+        <h2 class="mb-4">Browse the Collection</h2>
+        <div id="departmentsGrid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
 
-                updateJumbotronBackground();
-                setInterval(updateJumbotronBackground, 5000);
+        </div>
+        <h2 class="mt-5 mb-4">Featured Departments</h2>
+        <div id="featuredDepartments">
+
+        </div>
+    </div>
+
+    <script>
+        const baseUrl = "https://collectionapi.metmuseum.org/public/collection/v1";
+
+        const departmentGrid = [
+            {
+                id: 1,
+                name: "American Decorative Arts",
+                imageUrl: "https://images.metmuseum.org/CRDImages/ad/web-large/25636.jpg",
+            },
+            {
+                id: 3,
+                name: "Ancient Near Eastern Art",
+                imageUrl: "https://images.metmuseum.org/CRDImages/an/web-large/ME86_11_74.jpg",
+            },
+            {
+                id: 4,
+                name: "Arms and Armor",
+                imageUrl: "https://images.metmuseum.org/CRDImages/aa/web-large/29.150.24_.64_.116_003Sept2014.jpg",
+            },
+            {
+                id: 5,
+                name: "Arts of Africa, Oceania, and the Americas",
+                imageUrl: "https://images.metmuseum.org/CRDImages/ao/web-large/97411.jpg",
+            },
+            {
+                id: 6,
+                name: "Asian Art",
+                imageUrl: "https://images.metmuseum.org/CRDImages/as/web-large/DP-36796-002.jpg",
+            },
+            {
+                id: 7,
+                name: "The Cloisters",
+                imageUrl: "https://images.metmuseum.org/CRDImages/cl/web-large/DP-27354-001.jpg",
+            },
+            {
+                id: 8,
+                name: "The Costume Institute",
+                imageUrl: "https://images.metmuseum.org/CRDImages/ci/web-large/CI40.64.1ab_F.jpg",
+            },
+            {
+                id: 9,
+                name: "Drawings and Prints",
+                imageUrl: "https://images.metmuseum.org/CRDImages/dp/web-large/MM36502.jpg",
+            },
+            {
+                id: 10,
+                name: "Egyptian Art",
+                imageUrl: "https://images.metmuseum.org/CRDImages/eg/web-large/DP112632.jpg",
+            },
+            {
+                id: 11,
+                name: "European Paintings",
+                imageUrl: "https://images.metmuseum.org/CRDImages/ep/web-large/ep49.7.44.bw.R.jpg",
+            },
+            {
+                id: 12,
+                name: "European Sculpture and Decorative Arts",
+                imageUrl: "https://images.metmuseum.org/CRDImages/es/web-large/CI55.66.jpg",
+            },
+            {
+                id: 13,
+                name: "Greek and Roman Art",
+                imageUrl: "https://images.metmuseum.org/CRDImages/gr/web-large/LC-74_51_738.jpg",
+            },
+            {
+                id: 14,
+                name: "Islamic Art",
+                imageUrl: "https://images.metmuseum.org/CRDImages/is/web-large/wb-85.12.15.JPG",
+            },
+            {
+                id: 15,
+                name: "The Robert Lehman Collection",
+                imageUrl: "https://images.metmuseum.org/CRDImages/rl/web-large/DT3471.jpg",
+            },
+            {
+                id: 16,
+                name: "The Libraries",
+                imageUrl: "https://images.metmuseum.org/CRDImages/li/web-large/li125.97 D932.R.jpg",
+            },
+            {
+                id: 17,
+                name: "Medieval Art",
+                imageUrl: "https://images.metmuseum.org/CRDImages/md/web-large/sf17-190-922s1.jpg",
+            },
+            {
+                id: 18,
+                name: "Musical Instruments",
+                imageUrl: "https://images.metmuseum.org/CRDImages/mi/web-large/mi89.4.926.AV1.jpg",
+            },
+            {
+                id: 19,
+                name: "Photographs",
+                imageUrl: "https://images.metmuseum.org/CRDImages/ph/web-large/DP116360.jpg",
+            },
+            {
+                id: 21,
+                name: "Modern Art",
+                imageUrl: "https://images.metmuseum.org/CRDImages/ma/web-large/DT220060.jpg"
+            }
+        ];
+
+        const featuredDepartments = [
+            {
+                id: 6,
+                name: "Asian Art",
+            },
+            {
+                id: 10,
+                name: "Egyptian Art",
+            },
+            {
+                id: 11,
+                name: "European Paintings"
+            }
+        ];
+
+        async function getPublicObjects(objectIds, limit) {
+            const results = [];
+            const batchSize = 3;
+
+            for (let i = 0; i < objectIds.length; i += batchSize) {
+                const batch = objectIds.slice(i, i + batchSize);
+
+                const batchPromises = batch.map(async (id) => {
+                    const res = await fetch(`${baseUrl}/objects/${id}`);
+                    const data = await res.json();
+                    if (data.isPublicDomain && (data.primaryImageSmall || data.primaryImage)) {
+                        return {
+                            objectId: data.objectID,
+                            accessionYear: data.accessionYear,
+                            imageUrl: data.primaryImageSmall || data.primaryImage,
+                            additionalImages: data.additionalImages,
+                            department: data.department,
+                            title: data.title,
+                            culture: data.culture,
+                            period: data.period,
+                            artistRole: data.artistRole,
+                            artistName: data.artistDisplayName,
+                            artistBio: data.artistDisplayBio,
+                            artistGender: data.artistGender,
+                            objectDate: data.objectDate,
+                            objectBeginDate: data.objectBeginDate,
+                            objectEndDate: data.objectEndDate,
+                            country: data.country,
+                            region: data.region,
+                            subRegion: data.subregion,
+                            classification: data.classification,
+                        };
+                    }
+                    return null;
+                });
+
+                const finishedBatch = await Promise.all(batchPromises);
+
+                results.push(...finishedBatch.filter((item) => item !== null));
+
+                if (results.length >= limit) break;
             }
 
-            initializeJumbotron();
-        </script>
-    </header>
+            return results.slice(0, limit);
+        }
+
+        async function populateDepartmentsGrid(containerId) {
+            const container = document.getElementById(containerId);
+
+            departmentGrid.forEach((department) => {
+                const cardHTML = `
+                    <div class="col">
+                        <a href="./collections.html?department=${department.id}" class="text-decoration-none">
+                            <div class="card h-100 text-center" style="
+                                height: 250px;
+                            ">
+                                <img src="${department.imageUrl}" class="card-img-top" alt="${department.name}" style="
+                                    height: 150px;
+                                    width: 100%;
+                                ">
+                                <div class="card-body" style="
+                                    display: flex;
+                                    flex-direction: column;
+                                    justify-content: center;
+                                    align-items: center;
+                                    min-height: 100px;
+                                ">
+                                    <h5 class="card-title">${department.name}</h5>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
+            });
+        }
+
+        async function createFeaturedDepartments(containerId) {
+            const container = document.getElementById(containerId);
+
+            const getAll = featuredDepartments.map(async (department) => {
+                const res = await fetch(`${baseUrl}/objects?departmentIds=${department.id}`);
+                const data = await res.json();
+                const validObjects = await getPublicObjects(data.objectIDs, 6);
+
+                if (validObjects.length === 6) {
+                    const row = document.createElement("div");
+                    row.className = "mb-5";
+
+                    var cardsHTML = '';
+                    for (const item of validObjects) {
+                        cardsHTML += `
+                            <div class="col">
+                                <a href="./details.html?id=${item.objectId}" class="text-decoration-none">
+                                    <div class="card h-100 text-center" style="height: 100%">
+                                        <img src="${item.imageUrl}" class="card-img-top" alt="${item.title}" style="
+                                            height: 200px;
+                                            width: 100%;
+                                        ">
+                                        <div class="card-body" style="
+                                            display: flex;
+                                            flex-direction: column;
+                                            justify-content: space-between;
+                                            min-height: 120px;
+                                        ">
+                                            <h5 class="card-title">${item.title}</h5>
+                                            <p class="card-text">${item.artistName || item.culture || item.period || item.dynasty || item.country || item.subregion || item.region || "Unknown Artist"}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        `;
+                    }
+
+                    return `
+                        <h3 class="mt-3 mb-3">${department.name}</h3>
+                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-4">
+                            ${cardsHTML}
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="./collections.html?department=${department.id}" class="btn btn-primary">And More</a>
+                        </div>
+                    `;
+                }
+            });
+
+            const rows = await Promise.all(getAll);
+            container.innerHTML = rows.join('');
+        }
+
+        async function initializeBody() {
+            populateDepartmentsGrid("departmentsGrid");
+            await createFeaturedDepartments("featuredDepartments");
+        }
+
+        initializeBody();
+
+        function initializeJumbotron() {
+            const imageUrls = [
+                "https://images.metmuseum.org/CRDImages/ep/original/DP-13139-001.jpg",
+                "https://images.metmuseum.org/CRDImages/ep/original/DT1567.jpg",
+                "https://images.metmuseum.org/CRDImages/dp/original/DP829067.jpg",
+                "https://images.metmuseum.org/CRDImages/rl/original/SF-1975-1-2202.jpg",
+                "https://images.metmuseum.org/CRDImages/es/original/88487.jpg",
+                "https://images.metmuseum.org/CRDImages/aa/original/LC-32.75.335-001.jpg",
+                "https://images.metmuseum.org/CRDImages/ad/original/DP-12550-001.jpg",
+                "https://images.metmuseum.org/CRDImages/dp/original/DP824614.jpg",
+                "https://images.metmuseum.org/CRDImages/ep/original/DP-1012-01.jpg",
+                "https://images.metmuseum.org/CRDImages/ad/original/DP-12550-001.jpg",
+            ]
+
+            const jumbotron = document.getElementById("jumbotronImages");
+            let currIndex = 0;
+
+            function updateJumbotronBackground() {
+                jumbotron.style.backgroundImage = `url('${imageUrls[currIndex]}')`;
+                currIndex = (currIndex + 1) % imageUrls.length;
+            }
+
+            updateJumbotronBackground();
+            setInterval(updateJumbotronBackground, 5000);
+        }
+
+        initializeJumbotron();
+    </script>
 </body>
 
 </html>
