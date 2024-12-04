@@ -37,11 +37,11 @@
         </nav>
 
         <div class="jumbotron jumbotron-fluid text-center text-white" id="jumbotronImages" style="
+            background-image: url('https://images.metmuseum.org/CRDImages/ep/original/DP-13139-001.jpg');
             background-size: cover;
             background-position: center;
             height: 500px;
             margin-top: 56px;
-            transition: background-image 2s ease-in-out;
             ">
             <div class="mask" style="background-color: rgba(0, 0, 0, 0.6); height: 100%;">
                 <div class="d-flex justify-content-center align-items-center h-100">
@@ -316,34 +316,6 @@
         }
 
         initializeBody();
-
-        function initializeJumbotron() {
-            const imageUrls = [
-                "https://images.metmuseum.org/CRDImages/ep/original/DP-13139-001.jpg",
-                "https://images.metmuseum.org/CRDImages/ep/original/DT1567.jpg",
-                "https://images.metmuseum.org/CRDImages/dp/original/DP829067.jpg",
-                "https://images.metmuseum.org/CRDImages/rl/original/SF-1975-1-2202.jpg",
-                "https://images.metmuseum.org/CRDImages/es/original/88487.jpg",
-                "https://images.metmuseum.org/CRDImages/aa/original/LC-32.75.335-001.jpg",
-                "https://images.metmuseum.org/CRDImages/ad/original/DP-12550-001.jpg",
-                "https://images.metmuseum.org/CRDImages/dp/original/DP824614.jpg",
-                "https://images.metmuseum.org/CRDImages/ep/original/DP-1012-01.jpg",
-                "https://images.metmuseum.org/CRDImages/ad/original/DP-12550-001.jpg",
-            ]
-
-            const jumbotron = document.getElementById("jumbotronImages");
-            var currIndex = 0;
-
-            function updateJumbotronBackground() {
-                jumbotron.style.backgroundImage = `url('${imageUrls[currIndex]}')`;
-                currIndex = (currIndex + 1) % imageUrls.length;
-            }
-
-            updateJumbotronBackground();
-            setInterval(updateJumbotronBackground, 5000);
-        }
-
-        initializeJumbotron();
     </script>
 </body>
 </html>
