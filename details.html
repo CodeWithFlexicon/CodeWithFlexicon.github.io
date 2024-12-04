@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Art Details</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-secondary fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="./finalProject.html">Fantastic Art</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+                    aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="./finalProject.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./collections.html">Art</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container mt-5 pt-5">
+        <div class="row h-100">
+            <div id="infoSection" class="col-md-6 border border-secondary border-3 d-flex flex-column justify-content-center p-4">
+
+            </div>
+            <div class="col-md-6 d-flex justify-content-center align-items-center">
+                <div class="shadow-lg p-3 bg-body rounded" style="border: 5px solid #D4B105;">
+                    <div id="imageCarousel" class="carousel slide" data-bs-interval="false" style="
+                            width: 100%; 
+                            max-width: 500px; 
+                            height: 650px;
+                        ">
+                        <div id="carouselImages" class="carousel-inner h-100 d-flex align-items-center">
+
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const baseUrl = "https://collectionapi.metmuseum.org/public/collection/v1";
+
+        async function fetchArtDetails(id) {
+            const res = await fetch(`${baseUrl}/objects/${id}`);
+            return await res.json();
+        }
+
+        function createArtDetails(data) {
+            const infoSection = document.getElementById("infoSection");
+            const carouselImages = document.getElementById("carouselImages");
+
+            const images = [data.primaryImage, ...(data.additionalImages)];
+
+            infoSection.innerHTML = `
+                <h3 class="mb-3">${data.title || "Untitled"}</h3>
+                <p><strong>Object Name:</strong> ${data.objectName || "N/A"}</p>
+                <p><strong>Department:</strong> ${data.department || "N/A"}</p>
+                <p><strong>Period:</strong> ${data.period || "N/A"}</p>
+                <p><strong>Dynasty:</strong> ${data.dynasty || "N/A"}</p>
+                <p><strong>Culture:</strong> ${data.culture || "N/A"}</p>
+                <p><strong>Technique/Material:</strong> ${data.medium || "Unknown Material"}</p>
+                <p><strong>Dimensions:</strong> ${data.dimensions || "N/A"}</p>
+                <p><strong>Country:</strong> ${data.country || "N/A"}</p>
+                <p><strong>Region:</strong> ${data.region || "N/A"}</p>
+                <p><strong>Subregion:</strong> ${data.subregion || "N/A"}</p>
+                <p><strong>Acquired Year:</strong> ${data.accessionYear || "N/A"}</p>
+                <p><strong>Gallery Number:</strong> ${data.GalleryNumber || "N/A"}</p>
+            `;
+
+            carouselImages.innerHTML = images.map((image, index) => `
+                <div class="carousel-item ${index === 0 ? "active" : ""}">
+                    <img src="${image}" alt="Art Image ${index + 1}" class="d-block w-100 h-100" style="object-fit: contain;">
+                </div>
+            `).join("");
+        }
+
+        async function initializePage() {
+            const params = new URLSearchParams(location.search);
+            const objectId = params.get("id");
+
+            if (objectId) {
+                const artDetails = await fetchArtDetails(objectId);
+                if (artDetails) createArtDetails(artDetails);
+            } else {
+                document.getElementById("infoSection").innerHTML = "<p>Invalid Object WOOOOPS.</p>";
+            }
+        }
+
+        initializePage();
+    </script>
+</body>
+</html>
