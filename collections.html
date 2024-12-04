@@ -161,6 +161,7 @@
             totalObjectCount = data.total;
 
             if (allObjectIDs.length < 1) {
+                createPagination(0);
                 showNoMatch();
             } else {
                 const initialObjects = await fetchValidObjects(itemsPerPage * 5);
