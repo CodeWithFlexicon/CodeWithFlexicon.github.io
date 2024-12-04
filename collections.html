@@ -80,8 +80,19 @@
             </div>
         </div>
 
+        <div id="loading" class="d-flex justify-content-center align-items-center w-100 h-100 mt-5 mb-5">
+            <div class="spinner-border text-secondary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <span class="ms-2">Loading...</span>
+        </div>
+
         <div id="collectionGrid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
 
+        </div>
+
+        <div id="noMatchMessage" class="d-flex d-none justify-content-center align-items-center mt-5 mb-5">
+            <p><strong>No items match the criteria, sorry!</strong></p>
         </div>
 
         <div class="d-flex justify-content-center mt-4">
@@ -114,8 +125,28 @@
             departmentId = urlParams.get('department');
         }
 
+        function showLoading() {
+            document.getElementById("loading").classList.remove("d-none");
+        }
+
+        function hideLoading() {
+            document.getElementById("loading").classList.add("d-none");
+        }
+
+        function showNoMatch() {
+            document.getElementById("noMatchMessage").classList.remove("d-none");
+        }
+
+        function hideNoMatch() {
+            document.getElementById("noMatchMessage").classList.add("d-none");
+        }
+
         async function handleSearch() {
+            hideNoMatch();
+            showLoading();
             const searchBar = document.getElementById("searchBar");
+            const collectionGrid = document.getElementById("collectionGrid");
+            collectionGrid.innerHTML = "";
             searchTerm = searchBar.value;
             currentPage = 1;
             currentObjectIndex = 0;
@@ -125,12 +156,20 @@
             const searchUrl = `${baseUrl}/search?q=${searchTerm}`;
             const res = await fetch(searchUrl);
             const data = await res.json();
+
             allObjectIDs = data.objectIDs || [];
             totalObjectCount = data.total;
 
-            const initialObjects = await fetchValidObjects(itemsPerPage * 5);
-            validObjects.push(...initialObjects);
-            updateCollection();
+            if (allObjectIDs.length < 1) {
+                showNoMatch();
+            } else {
+                const initialObjects = await fetchValidObjects(itemsPerPage * 5);
+                validObjects.push(...initialObjects);
+                hideNoMatch();
+                updateCollection();
+            }
+
+            hideLoading();
         }
 
         async function fetchObjectIDs() {
@@ -187,6 +226,13 @@
         function createCards(objects) {
             const collectionGrid = document.getElementById("collectionGrid");
             collectionGrid.innerHTML = "";
+
+            if (objects.length < 1) {
+                showNoMatch();
+                return;
+            }
+
+            hideNoMatch();
 
             objects.forEach((obj) => {
                 const cardHTML = `
@@ -266,6 +312,8 @@
                 validObjects.push(...additionalObjects);
             }
 
+            hideNoMatch();
+
             const startIndex = (currentPage - 1) * itemsPerPage;
             const paginatedObjects = validObjects.slice(startIndex, startIndex + itemsPerPage);
 
@@ -282,6 +330,8 @@
         }
 
         async function initializeCollection() {
+            hideNoMatch();
+            showLoading();
             const params = new URLSearchParams(location.search);
             const departmentFilter = document.getElementById("departmentFilter");
 
@@ -294,9 +344,17 @@
             }
 
             await fetchObjectIDs();
-            const initialObjects = await fetchValidObjects(itemsPerPage * 5);
-            validObjects.push(...initialObjects);
-            updateCollection();
+
+            if (allObjectIDs.length < 1) {
+                showNoMatch();
+            } else {
+                const initialObjects = await fetchValidObjects(itemsPerPage * 5);
+                validObjects.push(...initialObjects);
+                hideNoMatch();
+                updateCollection();
+            }
+
+            hideLoading();
         }
 
         function handleDepartments() {
@@ -334,4 +392,5 @@
         initializeCollection();
     </script>
 </body>
+
 </html>
