@@ -308,8 +308,10 @@
             const totalPages = Math.ceil(validObjects.length / itemsPerPage);
 
             if (currentPage >= totalPages - 1) {
+                showLoading();
                 const additionalObjects = await fetchValidObjects(itemsPerPage * 3);
                 validObjects.push(...additionalObjects);
+                hideLoading();
             }
 
             hideNoMatch();
